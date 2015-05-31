@@ -1,0 +1,4 @@
+﻿name: Lib_costs
+main: lib.costs.api.CostsPlugin
+version: 1.0
+depend: [Lib_core]
