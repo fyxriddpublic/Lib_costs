@@ -1,4 +1,4 @@
-package lib.costs;
+package com.fyxridd.lib.costs;
 
 public class CostInfo {
     private int money;

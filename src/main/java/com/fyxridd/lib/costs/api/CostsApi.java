@@ -1,7 +1,6 @@
-package lib.costs.api;
+package com.fyxridd.lib.costs.api;
 
-import lib.costs.CostsMain;
-import org.bukkit.configuration.MemorySection;
+import com.fyxridd.lib.costs.CostsMain;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 

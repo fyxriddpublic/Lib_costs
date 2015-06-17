@@ -1,12 +1,12 @@
-package lib.costs;
+package com.fyxridd.lib.costs;
 
-import lib.core.api.ConfigApi;
-import lib.core.api.CoreApi;
-import lib.core.api.FormatApi;
-import lib.core.api.ShowApi;
-import lib.core.api.event.ReloadConfigEvent;
-import lib.core.api.inter.FancyMessage;
-import lib.costs.api.CostsPlugin;
+import com.fyxridd.lib.core.api.ConfigApi;
+import com.fyxridd.lib.core.api.CoreApi;
+import com.fyxridd.lib.core.api.FormatApi;
+import com.fyxridd.lib.core.api.ShowApi;
+import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
+import com.fyxridd.lib.core.api.inter.FancyMessage;
+import com.fyxridd.lib.costs.api.CostsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1,8 +1,8 @@
-package lib.costs.api;
+package com.fyxridd.lib.costs.api;
 
-import lib.core.api.CoreApi;
-import lib.core.api.FormatApi;
-import lib.costs.CostsMain;
+import com.fyxridd.lib.core.api.CoreApi;
+import com.fyxridd.lib.core.api.FormatApi;
+import com.fyxridd.lib.costs.CostsMain;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
