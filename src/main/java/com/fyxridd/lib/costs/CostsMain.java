@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CostsMain implements Listener{
@@ -201,13 +200,8 @@ public class CostsMain implements Listener{
         }
         //items
         HashMap<ItemStack, Integer> items = new HashMap<ItemStack, Integer>();
-        for (Object obj:config.getList(type+".items")) {
-            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) obj;
-            MemorySection ms = (MemorySection) map.get("exact");
-            ItemStack is = ItemsApi.loadItemStack(ms);
-            int amount = (Integer) map.get("amount");
-            items.put(is, amount);
-        }
+        MemorySection ms = (MemorySection)config.get(type+".items");
+        for (String key:ms.getValues(false).keySet()) items.put(ItemsApi.loadItemStack((MemorySection) ms.get(key+".exact")), ms.getInt(key+".amount", 1));
         //添加
         costsHash.get(plugin).put(type, new CostInfo(money, exp, level, items));
     }

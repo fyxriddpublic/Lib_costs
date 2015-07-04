@@ -38,11 +38,18 @@
         <!--资源-->
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>./</directory>
                 <targetPath>./</targetPath>
                 <includes>
-                    <include>**/*.yml</include>
-                    <include>**/*.xml</include>
+                    <include>plugin.yml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <targetPath>resources</targetPath>
+                <includes>
+                    <include>**/*</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
