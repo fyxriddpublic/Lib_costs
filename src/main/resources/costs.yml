@@ -5,35 +5,24 @@
 #################################
 #注意:一项内的经验与等级最多只能选其一,另一个必须为0,否则检测会出问题
 
-#注:money,exp,level,item都是可选的,不添加表示不花费
+#注:money,exp,level,items都是可选的,不添加表示不花费
 
-#item项格式
-#
-#1.普通匹配:
-#  -
-#    normal: 物品类型名|ID[:物品小ID]
-#    amount: xxx           (需求数量,默认为1,下同)
-#普通匹配说明: 不加小ID表示无小ID要求
-#如'normal: 35'表示匹配所有羊毛
-#如'normal: 35:0'表示匹配白色羊毛
-#
-#2.精确匹配:
-#  -
-#    exact:                #服务端可读取的物品格式
-#      type: xxx
-#    amount: xxx
+#items项格式
+#注意,匹配时会忽略物品名!(因为物品名玩家可以改)
+#格式:
+#  exact:
+#    type: xxx
+#  amount: xxx              (需求数量,默认为1)
 
 cost1:
   money: 100                   #花费的钱,>=0,0将不花费
   exp: 10                      #花费的经验,>=0,0将不花费
   level: 0                     #花费的等级,>=0,0将不花费
-  item:                        #物品类型(types),空将不花费
-    -                           #表示普通匹配10个任意羊毛
-      normal: 35
-      amount: 10
-    -                           #表示普通匹配1个白色羊毛
-      normal: WOOL:0
-    -                           #表示精确匹配5个石头
+  items:                       #物品类型(types),空将不花费
+    -                           #表示匹配1个苹果
+      exact:
+        type: APPLE
+    -                           #表示匹配5个石头
       exact:
         type: STONE
       amount: 5
