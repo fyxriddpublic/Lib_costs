@@ -78,7 +78,7 @@ public class CostsMain implements Listener{
             }
         }
         //经验
-        int hasExp = CoreApi.getTotalExperience(p);
+        int hasExp = p.getTotalExperience();
         if (costInfo.getExp() > 0) {
             boolean checkExp = hasExp >= costInfo.getExp();
             if (tip) ShowApi.tip(p, get(2010, costInfo.getExp(), get(checkExp ? 1330 : 1340)), true);
@@ -128,7 +128,7 @@ public class CostsMain implements Listener{
         if (costMoney > 0) EcoApi.del(p.getName(), costMoney);
         //经验
         int costExp = Math.min(hasExp, costInfo.getExp());
-        if (costExp > 0) CoreApi.setTotalExperience(p, hasExp-costExp);
+        if (costExp > 0) p.setTotalExperience(hasExp-costExp);
         //等级
         hasLevel = p.getLevel();
         int costLevel = Math.min(hasLevel, costInfo.getLevel());
