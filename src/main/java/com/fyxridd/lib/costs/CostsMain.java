@@ -24,7 +24,7 @@ public class CostsMain implements Listener{
     private String savePath;
 
     //插件名 类型名 花费信息
-    private HashMap<String, HashMap<String, CostInfo>> costsHash = new HashMap<String, HashMap<String, CostInfo>>();
+    private HashMap<String, HashMap<String, CostInfo>> costsHash = new HashMap<>();
 
 	public CostsMain() {
         instance = this;
@@ -199,7 +199,7 @@ public class CostsMain implements Listener{
             level = 0;
         }
         //items
-        HashMap<ItemStack, Integer> items = new HashMap<ItemStack, Integer>();
+        HashMap<ItemStack, Integer> items = new HashMap<>();
         MemorySection ms = (MemorySection)config.get(type+".items");
         for (String key:ms.getValues(false).keySet()) items.put(ItemsApi.loadItemStack((MemorySection) ms.get(key+".exact")), ms.getInt(key+".amount", 1));
         //添加
