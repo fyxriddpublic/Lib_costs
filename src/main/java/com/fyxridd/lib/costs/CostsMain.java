@@ -16,7 +16,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CostsMain implements Listener{
@@ -48,6 +50,8 @@ public class CostsMain implements Listener{
     public boolean cost(Player p, String plugin, String type, boolean force, boolean tip){
         if (p == null || plugin == null || type == null) return false;
 
+        List<FancyMessage> tips = new ArrayList<>();
+
         //类型不存在
         HashMap<String, CostInfo> hash = costsHash.get(plugin);
         if (hash == null) {
@@ -61,17 +65,18 @@ public class CostsMain implements Listener{
         }
 
         //检测
-        if (tip) ShowApi.tip(p, get(1300), true);
+        if (tip) tips.add(get(1300));
         boolean result = true;
         //金钱
         int hasMoney = (int) EcoApi.get(p.getName());
         if (costInfo.getMoney() > 0) {
             boolean checkMoney = hasMoney >= costInfo.getMoney();
-            if (tip) ShowApi.tip(p, get(2000, costInfo.getMoney(), get(checkMoney ? 1330 : 1340)), true);
+            if (tip) tips.add(get(2000, costInfo.getMoney(), get(checkMoney ? 1330 : 1340)));
             if (!checkMoney) {
                 if (!force) {
                     //提示结果
-                    ShowApi.tip(p, get(2520), true);
+                    tips.add(get(2520));
+                    ShowApi.tip(p, tips, true);
                     return false;
                 }
                 else result = false;
@@ -81,11 +86,12 @@ public class CostsMain implements Listener{
         int hasExp = p.getTotalExperience();
         if (costInfo.getExp() > 0) {
             boolean checkExp = hasExp >= costInfo.getExp();
-            if (tip) ShowApi.tip(p, get(2010, costInfo.getExp(), get(checkExp ? 1330 : 1340)), true);
+            if (tip) tips.add(get(2010, costInfo.getExp(), get(checkExp ? 1330 : 1340)));
             if (!checkExp) {
                 if (!force) {
                     //提示结果
-                    ShowApi.tip(p, get(2520), true);
+                    tips.add(get(2520));
+                    ShowApi.tip(p, tips, true);
                     return false;
                 }
                 else result = false;
@@ -95,11 +101,12 @@ public class CostsMain implements Listener{
         int hasLevel = p.getLevel();
         if (costInfo.getLevel() > 0) {
             boolean checkLevel = hasLevel >= costInfo.getLevel();
-            if (tip) ShowApi.tip(p, get(2020, costInfo.getExp(), get(checkLevel ? 1330 : 1340)), true);
+            if (tip) tips.add(get(2020, costInfo.getExp(), get(checkLevel ? 1330 : 1340)));
             if (!checkLevel) {
                 if (!force) {
                     //提示结果
-                    ShowApi.tip(p, get(2520), true);
+                    tips.add(get(2520));
+                    ShowApi.tip(p, tips, true);
                     return false;
                 }
                 else result = false;
@@ -110,11 +117,12 @@ public class CostsMain implements Listener{
         if (costInfo.getItems() != null && !costInfo.getItems().isEmpty()) {
             for (Map.Entry<ItemStack, Integer> entry:costInfo.getItems().entrySet()) {
                 boolean checkItem = ItemApi.hasExactItem(inv, entry.getKey(), entry.getValue(), true);
-                if (tip) ShowApi.tip(p, get(2030, NamesApi.getItemName(entry.getKey()), entry.getValue(), get(checkItem?1330:1340)), true);
+                if (tip) tips.add(get(2030, NamesApi.getItemName(entry.getKey()), entry.getValue(), get(checkItem ? 1330 : 1340)));
                 if (!checkItem) {
                     if (!force) {
                         //提示结果
-                        ShowApi.tip(p, get(2520), true);
+                        tips.add(get(2520));
+                        ShowApi.tip(p, tips, true);
                         return false;
                     }
                     else result = false;
@@ -141,8 +149,9 @@ public class CostsMain implements Listener{
         }
 
         //提示结果
-        if (result) ShowApi.tip(p, get(2500), true);
-        else ShowApi.tip(p, get(2510), true);
+        if (result) tips.add(get(2500));
+        else tips.add(get(2510));
+        ShowApi.tip(p, tips, true);
 
         //返回
         return result;
