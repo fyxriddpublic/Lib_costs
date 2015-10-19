@@ -1,27 +1,15 @@
 package com.fyxridd.lib.costs.api;
 
 import com.fyxridd.lib.costs.CostsMain;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import java.io.File;
 
 public class CostsApi {
     /**
-     * @param file yml文件,可为null(null时无效果)
-     * @see #reloadCosts(String, org.bukkit.configuration.file.YamlConfiguration)
-     */
-    public static void reloadCosts(String plugin, File file) {
-        CostsMain.instance.reloadCosts(plugin, file);
-    }
-
-    /**
      * 重新读取花费配置
-     * @param plugin 注册的插件名,可为null(null时无效果)
-     * @param config 配置,可为null(null时无效果)
+     * 会读取'插件名/costs.yml'文件
      */
-    public static void reloadCosts(String plugin, YamlConfiguration config) {
-        CostsMain.instance.reloadCosts(plugin, config);
+    public static void reloadCosts(String plugin) {
+        CostsMain.instance.reloadCosts(plugin);
     }
 
     /**

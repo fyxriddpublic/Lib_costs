@@ -157,17 +157,16 @@ public class CostsMain implements Listener{
         return result;
     }
 
-    /**
-     * @see com.fyxridd.lib.costs.api.CostsApi#reloadCosts(String, File)
-     */
+    public void reloadCosts(String plugin) {
+        if (plugin == null) return;
+        reloadCosts(plugin, CoreApi.loadConfigByUTF8(new File(CoreApi.pluginPath, plugin+"/costs.yml")));
+    }
+
     public void reloadCosts(String plugin, File file) {
         if (plugin == null || file == null) return;
         reloadCosts(plugin, CoreApi.loadConfigByUTF8(file));
     }
 
-    /**
-     * @see com.fyxridd.lib.costs.api.CostsApi#reloadCosts(String, org.bukkit.configuration.file.YamlConfiguration)
-     */
     public void reloadCosts(String plugin, YamlConfiguration config) {
         if (plugin == null || config == null) return;
 
