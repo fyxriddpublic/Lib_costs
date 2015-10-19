@@ -215,7 +215,7 @@ public class CostsMain implements Listener{
     }
 
     private void initConfig() {
-        ConfigApi.register(CostsPlugin.file, CostsPlugin.dataPath, CostsPlugin.pn, null);
+        ConfigApi.register(CostsPlugin.file, CostsPlugin.dataPath, CostsPlugin.pn);
         ConfigApi.loadConfig(CostsPlugin.pn);
     }
 
