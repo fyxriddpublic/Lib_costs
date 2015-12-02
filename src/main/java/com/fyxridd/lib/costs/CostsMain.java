@@ -101,7 +101,7 @@ public class CostsMain implements Listener{
         int hasLevel = p.getLevel();
         if (costInfo.getLevel() > 0) {
             boolean checkLevel = hasLevel >= costInfo.getLevel();
-            if (tip) tips.add(get(2020, costInfo.getExp(), get(checkLevel ? 1330 : 1340)));
+            if (tip) tips.add(get(2020, costInfo.getLevel(), get(checkLevel ? 1330 : 1340)));
             if (!checkLevel) {
                 if (!force) {
                     //提示结果
