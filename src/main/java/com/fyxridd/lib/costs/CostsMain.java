@@ -209,7 +209,9 @@ public class CostsMain implements Listener{
         //items
         HashMap<ItemStack, Integer> items = new HashMap<>();
         MemorySection ms = (MemorySection)config.get(type+".items");
-        for (String key:ms.getValues(false).keySet()) items.put(ItemsApi.loadItemStack((MemorySection) ms.get(key+".exact")), ms.getInt(key+".amount", 1));
+        if (ms != null) {
+            for (String key:ms.getValues(false).keySet()) items.put(ItemsApi.loadItemStack((MemorySection) ms.get(key+".exact")), ms.getInt(key+".amount", 1));
+        }
         //添加
         costsHash.get(plugin).put(type, new CostInfo(money, exp, level, items));
     }
