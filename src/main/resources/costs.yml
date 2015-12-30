@@ -9,9 +9,12 @@
 
 #items项格式
 #注意,匹配时会忽略物品名!(因为物品名玩家可以改)
-#格式:
+#格式一:
 #  exact:
 #    type: xxx
+#  amount: xxx              (需求数量,默认为1)
+#格式二:
+#  kind: "sword"            #物品种类
 #  amount: xxx              (需求数量,默认为1)
 
 cost1:
@@ -26,3 +29,5 @@ cost1:
       exact:
         type: STONE
       amount: 5
+    3:                           #表示匹配1个种类为'sword'的物品
+      kind: "sword"

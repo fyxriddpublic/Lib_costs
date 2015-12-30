@@ -1,16 +1,14 @@
 package com.fyxridd.lib.costs;
 
-import org.bukkit.inventory.ItemStack;
-
-import java.util.HashMap;
+import java.util.List;
 
 public class CostInfo {
     private int money;
     private int exp;
     private int level;
-    private HashMap<ItemStack, Integer> items;
+    private List<ItemInfo> items;
 
-    public CostInfo(int money, int exp, int level, HashMap<ItemStack, Integer> items) {
+    public CostInfo(int money, int exp, int level, List<ItemInfo> items) {
         this.money = money;
         this.exp = exp;
         this.level = level;
@@ -29,7 +27,7 @@ public class CostInfo {
         return level;
     }
 
-    public HashMap<ItemStack, Integer> getItems() {
+    public List<ItemInfo> getItems() {
         return items;
     }
 }

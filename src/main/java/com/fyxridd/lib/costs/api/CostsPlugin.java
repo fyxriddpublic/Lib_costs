@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 public class CostsPlugin extends JavaPlugin{
+    public static boolean itemKindHook;
     public static CostsPlugin instance;
     public static String pn;
     public static File file;
@@ -16,6 +17,12 @@ public class CostsPlugin extends JavaPlugin{
 
     @Override
     public void onEnable() {
+        try {
+            Class.forName("com.fyxridd.item.kind.api.ItemApi");
+            itemKindHook = true;
+        } catch (ClassNotFoundException e) {
+            itemKindHook = false;
+        }
         instance = this;
         pn = getName();
         file = getFile();

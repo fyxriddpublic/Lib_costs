@@ -1,11 +1,13 @@
 package com.fyxridd.lib.costs;
 
+import com.fyxridd.item.kind.api.model.KindInfo;
 import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.costs.api.CostsPlugin;
 import com.fyxridd.lib.items.api.ItemsApi;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -115,9 +117,32 @@ public class CostsMain implements Listener{
         //物品
         Inventory inv = p.getInventory();
         if (costInfo.getItems() != null && !costInfo.getItems().isEmpty()) {
-            for (Map.Entry<ItemStack, Integer> entry:costInfo.getItems().entrySet()) {
-                boolean checkItem = ItemApi.hasExactItem(inv, entry.getKey(), entry.getValue(), true);
-                if (tip) tips.add(get(2030, NamesApi.getItemName(entry.getKey()), entry.getValue(), get(checkItem ? 1330 : 1340)));
+            for (ItemInfo itemInfo:costInfo.getItems()) {
+                boolean checkItem = false;
+                switch (itemInfo.getMode()) {
+                    case 1:
+                        checkItem = ItemApi.hasExactItem(inv, itemInfo.getIs(), itemInfo.getAmount(), true);
+                        break;
+                    case 2:
+                        checkItem = hasKindAmount(inv, itemInfo.getKind(), itemInfo.getAmount());
+                        break;
+                }
+                if (tip) {
+                    String itemName = "";
+                    switch (itemInfo.getMode()) {
+                        case 1:
+                            itemName = NamesApi.getItemName(itemInfo.getIs());
+                            break;
+                        case 2:
+                            if (CostsPlugin.itemKindHook) {
+                                KindInfo kindInfo = com.fyxridd.item.kind.api.ItemApi.getKindInfo(itemInfo.getKind());
+                                if (kindInfo != null) itemName = kindInfo.getShow();
+                                else itemName = itemInfo.getKind();
+                            }
+                            break;
+                    }
+                    tips.add(get(2030, itemName, itemInfo.getAmount(), get(checkItem ? 1330 : 1340)));
+                }
                 if (!checkItem) {
                     if (!force) {
                         //提示结果
@@ -143,8 +168,15 @@ public class CostsMain implements Listener{
         if (costLevel > 0) p.setLevel(hasLevel-costLevel);
         //物品
         if (costInfo.getItems() != null && !costInfo.getItems().isEmpty()) {
-            for (Map.Entry<ItemStack, Integer> entry:costInfo.getItems().entrySet()) {
-                ItemApi.removeExactItem(inv, entry.getKey(), entry.getValue(), true, true);
+            for (ItemInfo itemInfo:costInfo.getItems()) {
+                switch (itemInfo.getMode()) {
+                    case 1:
+                        ItemApi.removeExactItem(inv, itemInfo.getIs(), itemInfo.getAmount(), true, true);
+                        break;
+                    case 2:
+                        removeKindAmount(inv, itemInfo.getKind(), itemInfo.getAmount());
+                        break;
+                }
             }
         }
 
@@ -182,6 +214,51 @@ public class CostsMain implements Listener{
     }
 
     /**
+     * 移除指定种类的指定数量物品
+     */
+    private void removeKindAmount(Inventory inv, String kind, int amount) {
+        if (!CostsPlugin.itemKindHook || amount <= 0) return;
+        //需要减少的数量
+        int need = amount;
+        for (int i=0;i<inv.getSize();i++) {
+            ItemStack is2 = inv.getItem(i);
+            if (is2 != null && is2.getType() != Material.AIR) {
+                if (kind.equals(com.fyxridd.item.kind.api.ItemApi.getKind(is2))) {//检测相同成功,减少物品
+                    int has = is2.getAmount();
+                    if (need <= has) {//结束
+                        if (has == need) inv.setItem(i, null);
+                        else is2.setAmount(has-need);
+                        break;
+                    }else {
+                        need -= has;
+                        inv.setItem(i, null);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 检测是否有指定数量的指定种类物品
+     * @return 如果未挂钩ItemKind插件则返回false
+     */
+    private boolean hasKindAmount(Inventory inv, String kind, int amount) {
+        if (!CostsPlugin.itemKindHook) return false;
+
+        int sum = 0;
+        for (int i=0;i<inv.getSize();i++) {
+            ItemStack check = inv.getItem(i);
+            if (check != null && check.getType() != Material.AIR) {
+                if (kind.equals(com.fyxridd.item.kind.api.ItemApi.getKind(check))) {
+                    sum += inv.getItem(i).getAmount();
+                    if (sum >= amount) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * 读取指定的花费配置
      * @param plugin 插件名,不为null
      * @param config 配置,不为null
@@ -207,10 +284,19 @@ public class CostsMain implements Listener{
             level = 0;
         }
         //items
-        HashMap<ItemStack, Integer> items = new HashMap<>();
+        List<ItemInfo> items = new ArrayList<>();
         MemorySection ms = (MemorySection)config.get(type+".items");
         if (ms != null) {
-            for (String key:ms.getValues(false).keySet()) items.put(ItemsApi.loadItemStack((MemorySection) ms.get(key+".exact")), ms.getInt(key+".amount", 1));
+            for (String key:ms.getValues(false).keySet()) {
+                MemorySection itemMs = (MemorySection) ms.get(key);
+                ItemInfo itemInfo = null;
+                if (itemMs.contains("exact")) {
+                    itemInfo = new ItemInfo(ItemsApi.loadItemStack((MemorySection) itemMs.get("exact")), itemMs.getInt("amount", 1));
+                }else if (itemMs.contains("kind")) {
+                    itemInfo = new ItemInfo(itemMs.getString("kind"), itemMs.getInt("amount", 1));
+                }
+                if (itemInfo != null) items.add(itemInfo);
+            }
         }
         //添加
         costsHash.get(plugin).put(type, new CostInfo(money, exp, level, items));
